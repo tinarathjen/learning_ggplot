@@ -16,7 +16,7 @@ ggplot(
 ) +geom_point()+
   scale_x_log10()
 
-##TRy new variable combinations
+##try new variable combinations
 #ggplot(gapminder_1977, aes(x = <VAR1>, y = <VAR2>, colour = <VAR3>)) + geom_point()
 #variables - country, pop, continent, lifeExp, and gdpPercap.
 
