@@ -240,3 +240,209 @@ b_plot+
        y="Yield",
        colour="Genotype")
 
+#Preparing plots for display
+#(assigning plot to a variable)
+rough_plot <- ggplot(data=a_countries, aes(x=year, y=lifeExp, colour=continent))+
+  geom_line()+
+  facet_wrap(~country)
+
+rough_plot+labs(
+  title="Figure 1", 
+  x="Year",
+  y="Life Expectancy",
+  colour="Continent")
+
+
+#Challenge 1
+rough_plot+labs(
+  title="Life expectancy in 'A' countries", 
+  x="Year",
+  y="Life Expectancy",
+  colour="Continent",
+  caption = "Data Source: Gapminder")
+
+
+#themes
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_bw()
+
+
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_grey()#default#
+
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_linedraw()
+
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_minimal()
+
+#themes
+
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_bw()+
+  theme(panel.grid.minor = element_blank(),
+        plot.title = element_text(face="bold"))
+
+
+#Challenge 2
+
+#2-1
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_bw()+
+  theme(strip.background = element_blank())
+
+#2-2
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_bw()+
+  theme(panel.grid.major=element_line(1))
+
+#2-3
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_bw()+
+  theme(axis.title = element_text(size=10, colour="blue"))
+
+#2-4
+
+rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_bw()+
+  theme(legend.position = "bottom")
+
+
+#Exporting the plot
+Plot_lifeExp <- rough_plot +
+  labs(
+    title = "Figure 1",
+    x = "Year",              
+    y = "Life expectancy",   
+    color = "Continent"     
+  ) +
+  theme_bw()+
+  theme(legend.position = "bottom")
+
+ggsave(filename="results/lifeExp.png", plot=Plot_lifeExp, 
+       width=12, height=10, dpi=300, units="cm")
+
+
+#Cowplot
+library(cowplot)
+
+plot1 <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) + geom_point()
+plot2 <- ggplot(gapminder, aes(x = continent, y = lifeExp)) + geom_boxplot()
+plot3 <- ggplot(gapminder, aes(x = gdpPercap, y = pop)) + geom_point()
+plot4 <- ggplot(gapminder, aes(x = lifeExp, y = pop)) + geom_point()
+
+plot_grid(plot1,plot2,plot3,plot4)
+
+plot_grid(plot1,plot2,plot3,plot4, rel_heights = c(1,3), labels="auto")
+
+
+#Challenge 3 Tidy Tuesday
+
+board_games <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-12/board_games.csv")
+
+
+glimpse(board_games)
+
+Rough_plot <- ggplot(data=board_games, mapping=aes(x=year_published, y=average_rating))+
+  geom_point(alpha=0.1)+
+  geom_smooth( se=FALSE,colour="red", size=1.5, )+
+  theme_minimal()
+
+
+
+Rough_plot+ labs(title="A Golden Age of Board Games?",
+        x="",
+        y="Average user rating",
+       subtitle = "Average user ratings for games by original year of production", 
+       caption= "SOURCE:BOARDGAMEGEEK/RASMUS GREVE")+
+  theme(title = element_text("bold"),
+        plot.background = element_rect(fill="gray93"),
+        panel.grid.major =element_line(size=0.5, colour="gray"),
+        panel.grid.minor =element_line(size=0.5, colour="gray"))+
+  xlim(1950,2010)+
+  ylim(0,10)
+  
+
+#things to still fix
+#x scale numbers
+#x and y scle numbers darker
+#caption has dark background and bit missing
+#labelling data points (geom_text?)geom_text(label=name, data="name")
+
+
+
+named_games <- filter(board_games, 
+                      name %in% c("Acquire",
+                                  "Connect Four",
+                                  "Mouse Trap", 
+                                  "Twilight Struggle", 
+                                  "Catan")) %>% mutate(name=ifelse(name=="Catan","The Settlers of Catan", name))
+
+Rough_plot+ labs(title="A Golden Age of Board Games?",
+                 x="",
+                 y="Average user rating",
+                 subtitle = "Average user ratings for games by original year of production", 
+                 caption= "SOURCE:BOARDGAMEGEEK/RASMUS GREVE")+
+  theme(title = element_text("bold"),
+        plot.background = element_rect(fill="gray93"),
+        panel.grid.major =element_line(size=0.5, colour="gray"),
+        panel.grid.minor =element_line(size=0.5, colour="gray"))+
+  xlim(1950,2010)+
+  ylim(0,10)+
+  geom_point(data=named_games, mapping=aes(x=year_published, y=average_rating))+
+  geom_text(aes(label=name), data=named_games, nudge_y=0.4)
+
