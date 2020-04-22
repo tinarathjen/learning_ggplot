@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+Rawdata/BOM_data.csv
+Rawdata/BOM_stations.csv
+Rawdata/gapminder.csv
