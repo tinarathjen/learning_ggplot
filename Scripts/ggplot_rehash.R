@@ -445,4 +445,3 @@ Rough_plot+ labs(title="A Golden Age of Board Games?",
   ylim(0,10)+
   geom_point(data=named_games, mapping=aes(x=year_published, y=average_rating))+
   geom_text(aes(label=name), data=named_games, nudge_y=0.4)
-
